@@ -1,15 +1,45 @@
-
-import { INCREASE, DECREASE } from './actions'
+import { INCREASE, DECREASE, CLEAR_CART, REMOVE } from './actions'
 function reducer (state, action) {
-    console.log({ state, action })
-    console.log('hi this is me')
-    if (action.type === DECREASE) {
-      return { ...state, count: state.count - 1 }
-    }
-    if (action.type === INCREASE) {
-      return { ...state, count: state.count + 1 }
-    }
-    return state
-  }
+  console.log({ state, action })
+  console.log('hi this is me')
+  switch (action.type) {
+    case CLEAR_CART:
+      return { ...state, cart: [] }
+    case INCREASE:
+      return {
+        ...state,
+        cart: state.cart.map(cartItem => {
+          if (cartItem.id === action.payload.id) {
+            return { ...cartItem, amount: cartItem.amount + 1 }
+          }
+          return cartItem
+        })
+      }
+    case DECREASE:
+      let temCart = []
+      if (action.payload.amount === 1) {
+        temCart = state.cart.filter(item => item.id !== action.payload.id)
+      } else {
+        temCart = state.cart.map(cartItem => {
+          if (cartItem.id === action.payload.id) {
+            return { ...cartItem, amount: cartItem.amount - 1 }
+          }
+          return cartItem
+        })
+      }
+      return {
+        ...state,
+        cart: temCart
+      }
+    case REMOVE:
+      return {
+        ...state,
+        cart: state.cart.filter(item => item.id !== action.payload.id)
+      }
 
-  export default reducer
+    default:
+      return state
+  }
+}
+
+export default reducer
