@@ -1,7 +1,6 @@
 import React from 'react'
 // components
 import Navbar from './components/Navbar'
-import { INCREASE, DECREASE } from './actions'
 import reducer from './reducer'
 import CartContainer from './components/CartContainer'
 // items
